@@ -35,10 +35,10 @@ const suscripcionesPost = async (req, res = response) => {
 }
 
 const suscripcionesPut = async (req, res = response) => {
-    const { tipoPaquete,fechaPago,estadoSuscripcion } = req.body//modificar
+    const { tipoPaquete,fechaPago,precio,estadoSuscripcion } = req.body//modificar
     let mensaje = ""
     try {
-        const suscripciones = await Suscripciones.findOneAndUpdate({ id: id}, {tipoPaquete:tipoPaquete,fechaPago:fechaPago,estadoSuscripcion: estadoSuscripcion})//Primera llave es el nombre del atributo, el segundo es el nuevo atributo
+        const suscripciones = await Suscripciones.findOneAndUpdate({ id: id}, {tipoPaquete:tipoPaquete,fechaPago:fechaPago,precio:precio,estadoSuscripcion: estadoSuscripcion})//Primera llave es el nombre del atributo, el segundo es el nuevo atributo
         mensaje = "Modificado exitosamente Suscripciones"
     } catch (error) {
         mensaje = "No modificado error"
@@ -69,3 +69,5 @@ module.exports = {
     suscripcionesPut,
     suscripcionesDelete
 }
+
+

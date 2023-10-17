@@ -17,7 +17,7 @@ const RolesSchema = Schema({
     },
     estadorol:{
             type: Boolean,
-            required: true,
+            required: true
     }
 });
 

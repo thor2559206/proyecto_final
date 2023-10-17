@@ -1,3 +1,4 @@
+
 const {Routes, Router} = require('express')
 
 const route = Router()
@@ -12,4 +13,4 @@ route.put ('/', suscripcionesPut)
 
 route.delete ('/', suscripcionesDelete)
 
-module.exports = Router;
+module.exports = route

@@ -13,6 +13,7 @@ class Server{
         this.servicioPath = '/api/servicios' 
         this.paquetePath = '/api/paquetes'
         this.rolesPath = '/api/roles'
+        this.suscripcionesPath = '/api/suscripciones'
         this.middlewares()
         this.routes()
         this.conectarbs()
@@ -32,9 +33,10 @@ class Server{
     }
 
     routes() {
-        this.app.use(this.citaPath, require('../routes/citas'))
+       this.app.use(this.citaPath, require('../routes/citas'))
        this.app.use(this.servicioPath, require('../routes/servicios'))
        this.app.use(this.paquetePath, require('../routes/paquetes'))
+       this.app.use(this.suscripcionesPath, require('../routes/suscripciones'))
        this.app.use(this.rolesPath, require('../routes/roles'));
     }
 

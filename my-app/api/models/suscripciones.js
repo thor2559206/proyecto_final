@@ -1,3 +1,5 @@
+
+
 const { Schema, model } = require('mongoose');
 
 const SuscripcionesSchema = Schema({
@@ -8,10 +10,16 @@ const SuscripcionesSchema = Schema({
     },
     fechaPago: {
         type: [{
-            type: Date,
+            type: String,
         }],
         required: [true, 'La fecha de pago es requerida'],
     },
+    precio:{
+    type: [{
+        type: Number,
+    }],
+    required: [true, 'el precio  es requerido'],
+},
     estadoSuscripcion: { 
         type: Boolean,
         required: true,
@@ -19,3 +27,5 @@ const SuscripcionesSchema = Schema({
 });
 
 module.exports = model('Suscripciones', SuscripcionesSchema);
+
+

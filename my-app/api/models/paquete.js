@@ -1,98 +1,47 @@
-const { response } = require('express');
-const Paquete = require('../models/paquete');
+const { Schema, model } = require('mongoose');
 
-const paqueteGet = async (req, res = response) => {
-    try {
-        const paquetes = await Paquete.find();
-        res.json({
-            paquetes
-        });
-    } catch (error) {
-        res.status(500).json({
-            error: 'Error al obtener paquetes'
-        });
-    }
-};
+const PaqueteSchema = Schema({
+    paquetes: {
+        type: String,
+        required: true,
+        match: /^[A-Za-z\s]+$/, // Validación de coincidencia para letras y números
+    },
 
-const paquetePost = async (req, res = response) => {
-    const { paquetes, servicios, frecuencia, total, precioventa, estado } = req.body;
-    try {
-        const paquete = new Paquete({
-            paquetes,
-            servicios,
-            frecuencia,
-            total,
-            precioventa,
-            estado
-        });
-        await paquete.save();
-        res.json({
-            msg: 'Éxito en la inserción de paquetes'
-        });
-    } catch (error) {
-        if (error.name === 'ValidationError') {
-            const validationErrors = Object.values(error.errors).map(val => val.message);
-            res.status(400).json({
-                errors: validationErrors
-            });
-        } else {
-            res.status(500).json({
-                error: 'Error al insertar el paquete'
-            });
-        }
-    }
-};
+    servicios: {
+        type: [String], // Array de strings
+        required: true,
+        validate: {
+            validator: function (value) {
+                // Validación personalizada para cada elemento del array
+                return value.every((item) => /^[A-Za-z\s]+$/.test(item)); // Coincidencia para letras y espacios en cada elemento
+            },
+            message: 'Los servicios solo deben contener letras',
+        },
+    },
+    frecuencia: {
+        type: String, 
+        required: true,
+        match: /^[A-Za-z\s]+$/, 
+    },
 
-const paquetePut = async (req, res = response) => {
-    const { _id } = req.query; // Obtener el ID del paquete
-    const { paquetes, servicios, frecuencia, total, precioventa, estado } = req.body;
-    try {
-        const paquete = await Paquete.findByIdAndUpdate(_id, {
-            paquetes,
-            servicios,
-            frecuencia,
-            total,
-            precioventa,
-            estado
-        }, { new: true });
-        if (!paquete) {
-            return res.status(404).json({
-                error: 'Paquete no encontrado'
-            });
-        }
-        res.json({
-            msg: 'Paquete modificado',
-            paquete
-        });
-    } catch (error) {
-        res.status(500).json({
-            error: 'Error al modificar el paquete'
-        });
-    }
-};
+    total: {
+        type: Number,
+        required: true,
+        min: [4000, 'El total mínimo permitido es 4000'],
+        max: [1000000, 'El total máximo permitido es 1000000'],
+    },
 
-const paqueteDelete = async (req, res = response) => {
-    const { _id } = req.query; // Obtener el ID del paquete
-    try {
-        const paquete = await Paquete.findByIdAndDelete(_id);
-        if (!paquete) {
-            return res.status(404).json({
-                error: 'Paquete no encontrado'
-            });
-        }
-        res.json({
-            msg: 'Paquete eliminado'
-        });
-    } catch (error) {
-        res.status(500).json({
-            error: 'Error al eliminar el paquete'
-        });
-    }
-};
+    precioventa: {
+        type: Number,
+        required: true,
+        min: [4000, 'El precio de venta mínimo permitido es 5000'],
+        max: [1000000, 'El precio de venta máximo permitido es 1000000'],
+    },
+    estado: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+});
 
-module.exports = {
-    paqueteGet,
-    paquetePost,
-    paquetePut,
-    paqueteDelete
-};
+module.exports = model('Paquete', PaqueteSchema);
